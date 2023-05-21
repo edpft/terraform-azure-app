@@ -3,17 +3,17 @@ variable "display_name" {
 }
 
 variable "redirect_uris" {
-  type = list(string)
+  type = set(string)
 }
 
 variable "app_roles" {
-  type = list(string)
+  type = set(string)
 }
 
 variable "api_permissions" {
   type = list(object({
     app_name       = string
-    required_roles = list(string)
+    required_roles = set(string)
   }))
   default = []
 }
