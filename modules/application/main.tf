@@ -4,10 +4,17 @@ data "azuread_application" "requiring_applications" {
   display_name = var.api_permissions[count.index].app_name
 }
 
+resource "random_uuid" "app_role_id" {
+  for_each = var.app_roles
+  keepers = {
+    "key" = each.value
+  }
+}
+
 locals {
   app_role_ids = tomap({
-    for app_role in var.app_roles :
-    app_role => uuid()
+    for app_role, app_role_id in random_uuid.app_role_id :
+    app_role => app_role_id.result
   })
 }
 
