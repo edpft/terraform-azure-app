@@ -68,11 +68,13 @@ openssl pkcs12 \
     -certpbe PBE-SHA1-3DES \
     -keypbe PBE-SHA1-3DES \
     -export -macalg sha1 \
-    -password pass:"Password" \
+    -password pass:"<PASSWORD>" \
     -out client.pfx \
     -inkey client.key \
     -in client.crt
 ```
+
+Where `<PASSWORD>` is the password that will be used to secure the file.
 
 ### Install the Azure CLI
 
@@ -83,8 +85,9 @@ curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 ### Create a service principle
 
 ```sh
-az ad sp create-for-rbac --name terraform --cert @/path/to/cert
+az ad sp create-for-rbac --name terraform --cert @<PATH>
 ```
+Where `<PATH>` is the `/path/to/your/cert.crt`
 
 Add Microsoft Graph application permission Application.ReadWrite.All (Read and write all applications).
 
@@ -92,11 +95,14 @@ Add Microsoft Graph application permission Application.ReadWrite.All (Read and w
 az ad app permission add --id <APP_ID> --api 00000003-0000-0000-c000-000000000000 --api-permissions 1bfefb4e-e0b5-418b-a88f-73c46d2cc8e9=Role
 ```
 
+Where `<APP_ID>` is the ID of the service principle you've just created.
+
 Grant admin consent
 
 ```sh
 az ad app permission admin-consent --id <APP_ID>
 ```
+Where `<APP_ID>` is the ID of the service principle you've just created.
 
 ## Initialise terraform repo
 
