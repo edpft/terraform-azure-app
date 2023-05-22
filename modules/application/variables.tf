@@ -9,11 +9,3 @@ variable "redirect_uris" {
 variable "app_roles" {
   type = set(string)
 }
-
-variable "api_permissions" {
-  type = list(object({
-    app_name       = string
-    required_roles = set(string)
-  }))
-  default = []
-}
