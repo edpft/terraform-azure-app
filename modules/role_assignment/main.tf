@@ -2,7 +2,7 @@ locals {
   role_assignments = flatten([
     for api_permission in var.api_permissions : [
       for required_role in api_permission.required_roles : {
-        app_role_id : var.registered_service_principles[api_permission.target_app_name].app_role_ids[required_role]
+        app_role_id : var.registered_service_principles[api_permission.target_app_name].app_role_ids[replace(lower(required_role), ".", "-")]
         principal_object_id : var.registered_service_principles[api_permission.app_name].object_id
         resource_object_id : var.registered_service_principles[api_permission.target_app_name].object_id
       }

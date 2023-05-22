@@ -42,7 +42,7 @@ resource "azuread_application" "application" {
       description          = app_role.value
       display_name         = app_role.value
       id                   = local.app_role_ids[app_role.value]
-      value                = replace(lower(app_role.value), " ", "-")
+      value                = replace(lower(app_role.value), ".", "-")
     }
   }
 }
