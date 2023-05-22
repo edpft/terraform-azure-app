@@ -1,9 +1,7 @@
 output "registered_apps" {
   value = [
-    for key, value in azuread_application.application :
-      {
-        "display_name" = value.display_name
-      }
+    for index, application in azuread_application.application :
+      application.display_name
   ]
 }
 

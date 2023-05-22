@@ -5,8 +5,6 @@ variable "registered_service_principles" {
   }))
 }
 
-
-
 variable "api_permissions" {
   type = list(object({
     app_name        = string
