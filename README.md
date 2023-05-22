@@ -16,6 +16,13 @@ Add `tfenv`to your path
 echo 'export PATH="$HOME/.tfenv/bin:$PATH"' >> ~/.bash_profile
 ```
 
+or if you're using WSL:
+
+```sh
+echo 'export PATH="$HOME/.tfenv/bin:$PATH"' >> ~/.bashrc
+```
+
+
 Source your bash profile to active it
 
 ```sh
@@ -61,7 +68,7 @@ openssl pkcs12 \
     -certpbe PBE-SHA1-3DES \
     -keypbe PBE-SHA1-3DES \
     -export -macalg sha1 \
-    -password pass:"<PASSWORD>" \
+    -password pass:"Password" \
     -out client.pfx \
     -inkey client.key \
     -in client.crt

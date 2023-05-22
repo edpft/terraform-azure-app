@@ -1,5 +1,14 @@
+locals {
+  app_roles = toset(flatten([
+    for app in var.apps : [
+      for app_role in app.app_roles :
+        app_role
+    ]
+  ]))
+}
+
 resource "random_uuid" "app_role_id" {
-  for_each = var.app_roles
+  for_each = local.app_roles
   keepers = {
     "key" = each.value
   }
@@ -13,27 +22,35 @@ locals {
 }
 
 resource "azuread_application" "application" {
-  display_name = var.display_name
+  for_each = {
+    for index, app in var.apps:
+    index => app
+  }
+
+  display_name = each.value.display_name
 
   single_page_application {
-    redirect_uris = var.redirect_uris
+    redirect_uris = each.value.redirect_uris
   }
 
   dynamic "app_role" {
-    for_each = var.app_roles
+    for_each = each.value.app_roles
     iterator = app_role
 
     content {
       allowed_member_types = ["Application"]
       description          = app_role.value
       display_name         = app_role.value
-      id                   = lookup(local.app_role_ids, app_role.value)
-      value                = replace(upper(app_role.value), " ", ".")
+      id                   = local.app_role_ids[app_role.value]
+      value                = replace(lower(app_role.value), " ", "-")
     }
   }
 }
 
 resource "azuread_service_principal" "service_principle" {
-  application_id               = azuread_application.application.application_id
+  for_each = azuread_application.application
+  
+  application_id               = each.value.application_id
   app_role_assignment_required = false
+  use_existing = true
 }
